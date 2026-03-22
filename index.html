@@ -1,0 +1,232 @@
+ <!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Генератор паролей</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #1a2a3a;
+        }
+        .sub {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .password-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        .password-box input {
+            flex: 1;
+            padding: 14px;
+            font-size: 18px;
+            font-family: monospace;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            background: #fafafa;
+            text-align: center;
+        }
+        .password-box button {
+            padding: 0 20px;
+            background: #eef2ff;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            color: #2c7be5;
+        }
+        .setting {
+            margin-bottom: 25px;
+        }
+        .setting label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        input[type="range"] {
+            width: 100%;
+        }
+        .length-value {
+            float: right;
+            background: #eef2ff;
+            padding: 2px 10px;
+            border-radius: 20px;
+        }
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .options label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: normal;
+        }
+        button.generate {
+            width: 100%;
+            padding: 14px;
+            background: #2c7be5;
+            border: none;
+            border-radius: 40px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button.generate:hover {
+            background: #1a68d1;
+        }
+        .faq {
+            margin-top: 30px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        .faq h3 {
+            font-size: 18px;
+            margin: 15px 0 5px;
+        }
+        .faq p {
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h1>🔐 Генератор паролей</h1>
+    <div class="sub">Создайте безопасную комбинацию. Мы не храним ваши данные.</div>
+    
+    <div class="password-box">
+        <input type="text" id="pass" value="">
+        <button id="copyBtn">📋 Копировать</button>
+    </div>
+    
+    <div class="setting">
+        <label>Длина пароля <span class="length-value" id="lenShow">16</span></label>
+        <input type="range" id="length" min="6" max="32" value="16">
+    </div>
+    
+    <div class="options">
+        <label><input type="checkbox" id="upper" checked> A-Z (заглавные)</label>
+        <label><input type="checkbox" id="lower" checked> a-z (строчные)</label>
+        <label><input type="checkbox" id="nums" checked> 0-9 (цифры)</label>
+        <label><input type="checkbox" id="symb" checked> !@#$%^&* (символы)</label>
+    </div>
+    
+    <button class="generate" id="genBtn">Сгенерировать пароль</button>
+ <div class="faq">
+        <h3>🔒 Безопасен ли генератор?</h3>
+        <p>Да! Генератор работает только в вашем браузере. Пароли никуда не отправляются.</p>
+        <h3>📌 Как создать надёжный пароль?</h3>
+        <p>Используйте длину от 12 символов и все типы символов.</p>
+        <h3>⚠️ Почему опасны слабые пароли?</h3>
+        <p>"123456", "qwerty" — первые цели хакеров. Миллионы аккаунтов взламывают из-за этого.</p>
+    </div>
+</div>
+
+<script>
+    // Получаем элементы
+    let passField = document.getElementById('pass');
+    let genBtn = document.getElementById('genBtn');
+    let copyBtn = document.getElementById('copyBtn');
+    let lengthSlider = document.getElementById('length');
+    let lenShow = document.getElementById('lenShow');
+    let upperChk = document.getElementById('upper');
+    let lowerChk = document.getElementById('lower');
+    let numsChk = document.getElementById('nums');
+    let symbChk = document.getElementById('symb');
+    
+    // Наборы символов
+    let upperChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let lowerChars = 'abcdefghijklmnopqrstuvwxyz';
+    let numChars = '0123456789';
+    let symChars = '!@#$%^&*';
+    
+    // Функция генерации
+    function generate() {
+        let len = parseInt(lengthSlider.value);
+        let chars = '';
+        
+        if (upperChk.checked) chars += upperChars;
+        if (lowerChk.checked) chars += lowerChars;
+        if (numsChk.checked) chars += numChars;
+        if (symbChk.checked) chars += symChars;
+        
+        if (chars === '') {
+            passField.value = 'Выберите тип символов';
+            return;
+        }
+        
+        let result = '';
+        for (let i = 0; i < len; i++) {
+            let randomIndex = Math.floor(Math.random() * chars.length);
+            result += chars[randomIndex];
+        }
+        
+        passField.value = result;
+    }
+    
+    // Функция копирования
+    function copy() {
+        let text = passField.value;
+        if (!text || text === 'Выберите тип символов') {
+            alert('Сначала сгенерируйте пароль');
+            return;
+        }
+        
+        // Старый способ копирования (работает везде)
+        passField.select();
+        passField.setSelectionRange(0, 99999);
+        document.execCommand('copy');
+        
+        let oldText = copyBtn.innerHTML;
+        copyBtn.innerHTML = '✓ Готово!';
+        setTimeout(function() {
+            copyBtn.innerHTML = oldText;
+        }, 1500);
+    }
+    
+    // Обновление длины
+    function updateLength() {
+        lenShow.innerText = lengthSlider.value;
+        generate();
+    }
+    
+    // Подключаем события
+    genBtn.onclick = generate;
+    copyBtn.onclick = copy;
+    lengthSlider.oninput = updateLength;
+    upperChk.onchange = generate;
+    lowerChk.onchange = generate;
+    numsChk.onchange = generate;
+    symbChk.onchange = generate;
+    
+    // Запускаем генерацию при загрузке
+    generate();
+</script>
+</body>
+</html>
