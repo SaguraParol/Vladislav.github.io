@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Генератор паролей</title>
+    <title>Генератор паролей | Защита информации</title>
     <style>
         * {
             margin: 0;
@@ -47,7 +47,7 @@
         }
 
         .glass-card {
-            max-width: 620px;
+            max-width: 780px;
             width: 100%;
             background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(16px);
@@ -256,7 +256,6 @@
             color: #4ade80;
         }
 
-        /* Новый блок: формула энтропии */
         .entropy-block {
             margin-top: 16px;
             padding: 14px 18px;
@@ -280,19 +279,169 @@
             color: #94a3b8;
         }
 
-        .fact-block {
+        .combinations-block {
+            margin-top: 12px;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 16px;
+            font-size: 0.8rem;
+            text-align: center;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+        }
+
+        .combinations-title {
+            color: #38bdf8;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .combinations-number {
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #facc15;
+            font-weight: bold;
+            word-break: break-all;
+            margin: 8px 0;
+            background: rgba(0,0,0,0.3);
+            padding: 8px;
+            border-radius: 12px;
+        }
+
+        .combinations-hint {
+            font-size: 0.65rem;
+            color: #38bdf8;
+            margin-top: 5px;
+        }
+
+        .speed-selector {
+            margin-top: 12px;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 16px;
+            border: 1px solid rgba(139, 92, 246, 0.4);
+        }
+
+        .speed-title {
+            color: #c084fc;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 0.8rem;
+        }
+
+        .speed-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .speed-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            color: #94a3b8;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .speed-btn.active {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            border-color: #a78bfa;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+        }
+
+        .speed-btn:hover:not(.active) {
+            background: rgba(139, 92, 246, 0.3);
+            color: #c4b5fd;
+        }
+
+        .crack-time-block {
+            margin-top: 12px;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 16px;
+            font-size: 0.8rem;
+            text-align: center;
+            border: 1px solid rgba(234, 179, 8, 0.4);
+        }
+
+        .crack-title {
+            color: #fbbf24;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .crack-time {
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: #facc15;
+            font-weight: bold;
+            margin: 6px 0;
+        }
+
+        .crack-speed-note {
+            font-size: 0.65rem;
+            color: #94a3b8;
+            margin-top: 5px;
+        }
+
+        /* ЧЕСТНЫЙ БЛОК ПРЕДУПРЕЖДЕНИЯ */
+        .warning-block {
             margin-top: 20px;
-            padding: 16px 18px;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+            border-left: 4px solid #ef4444;
+        }
+        .warning-title {
+            color: #f87171;
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .warning-text {
+            font-size: 0.75rem;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+        .warning-text strong {
+            color: #facc15;
+        }
+        .warning-text ul {
+            margin-left: 20px;
+            margin-top: 6px;
+            margin-bottom: 8px;
+        }
+        .warning-text li {
+            margin: 4px 0;
+        }
+        .recommendation {
+            margin-top: 10px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #4ade80;
+        }
+
+        .fact-block {
+            margin-top: 16px;
+            padding: 14px 16px;
             background: rgba(0, 0, 0, 0.3);
             border-radius: 20px;
             border-left: 3px solid #3b82f6;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #94a3b8;
-            line-height: 1.5;
+            line-height: 1.4;
         }
 
         .fact-icon {
-            font-size: 1.1rem;
+            font-size: 1rem;
             margin-right: 8px;
         }
 
@@ -301,7 +450,7 @@
         }
 
         hr {
-            margin: 18px 0 12px;
+            margin: 16px 0 12px;
             border: none;
             height: 1px;
             background: rgba(255, 255, 255, 0.06);
@@ -311,7 +460,7 @@
             font-size: 0.7rem;
             text-align: center;
             color: #64748b;
-            margin-top: 20px;
+            margin-top: 16px;
         }
     </style>
 </head>
@@ -353,10 +502,50 @@
 
     <div id="strengthMeter" class="strength-meter weak">🔄 Нажмите «Создать пароль»</div>
 
-    <!-- БЛОК С ФОРМУЛОЙ ЭНТРОПИИ -->
     <div id="entropyBlock" class="entropy-block">
         <div class="entropy-formula">📐 E = L × log₂(N)</div>
         <div id="entropyDetails" class="entropy-detail">—</div>
+    </div>
+
+    <div id="combinationsBlock" class="combinations-block">
+        <div class="combinations-title">🔢 ВСЕГО ВОЗМОЖНЫХ ПАРОЛЕЙ С ТЕКУЩИМИ НАСТРОЙКАМИ:</div>
+        <div id="combinationsNumber" class="combinations-number">—</div>
+        <div class="combinations-hint">⚡ СВЯЗЬ С ЭНТРОПИЕЙ: E = log₂(число комбинаций)</div>
+    </div>
+
+    <div class="speed-selector">
+        <div class="speed-title">🎯 КТО ПЫТАЕТСЯ ВЗЛОМАТЬ ПАРОЛЬ?</div>
+        <div class="speed-buttons">
+            <div id="speedNormal" class="speed-btn active">🖥️ Обычный хакер<br><span style="font-size:0.65rem;">1 млрд паролей/сек</span></div>
+            <div id="speedSuper" class="speed-btn">🏛️ Спецслужбы / Суперкомпьютер<br><span style="font-size:0.65rem;">100 млрд паролей/сек</span></div>
+        </div>
+    </div>
+
+    <div id="crackTimeBlock" class="crack-time-block">
+        <div class="crack-title">⏱️ ВРЕМЯ ВЗЛОМА ПЕРЕБОРОМ:</div>
+        <div id="crackTimeDisplay" class="crack-time">—</div>
+        <div class="crack-speed-note" id="speedNote">⚡ Расчёт для скорости 1 миллиард паролей в секунду (мощный компьютер)</div>
+    </div>
+
+    <!-- ЧЕСТНЫЙ БЛОК ПРЕДУПРЕЖДЕНИЯ -->
+    <div class="warning-block">
+        <div class="warning-title">
+            <span>⚠️</span> ЧЕСТНОЕ ПРЕДУПРЕЖДЕНИЕ
+        </div>
+        <div class="warning-text">
+            <p><strong>✅ Сложный пароль защищает от:</strong> перебора (brute force) и словарных атак.</p>
+            <p><strong>❌ Сложный пароль НЕ защищает от:</strong></p>
+            <ul>
+                <li><strong style="color:#f87171">Фишинг</strong> — поддельный сайт, который крадёт пароль при вводе</li>
+                <li><strong style="color:#f87171">Кейлоггеры</strong> — вирусы, записывающие нажатия клавиш</li>
+                <li><strong style="color:#f87171">Перехват трафика</strong> — если сайт без HTTPS или вы в общественном Wi-Fi</li>
+                <li><strong style="color:#f87171">Утечка базы данных</strong> — если сайт хранит пароли в открытом виде</li>
+                <li><strong style="color:#f87171">Социальная инженерия</strong> — вас могут обманом заставить выдать пароль</li>
+            </ul>
+            <div class="recommendation">
+                🛡️ <strong>РЕКОМЕНДАЦИИ ДЛЯ ПОЛНОЙ ЗАЩИТЫ:</strong> включите двухфакторную аутентификацию (2FA) везде, где это возможно; используйте менеджер паролей (Bitwarden, Proton Pass); никогда не вводите пароль на подозрительных сайтах; установите антивирус; проверяйте наличие HTTPS в адресной строке.
+            </div>
+        </div>
     </div>
 
     <div class="fact-block" id="factBox">
@@ -373,14 +562,12 @@
 
 <script>
     (function() {
-        // ---------- НАБОРЫ СИМВОЛОВ ----------
         const UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         const LOWER = 'abcdefghijklmnopqrstuvwxyz';
         const DIGITS = '0123456789';
         const SPECIAL = '!@#$%^&*';
         const AMBIGUOUS = '0OIl1';
 
-        // DOM элементы
         const passwordDiv = document.getElementById('passwordField');
         const genBtn = document.getElementById('generateBtn');
         const copyBtn = document.getElementById('copyBtn');
@@ -394,8 +581,15 @@
         const strengthDiv = document.getElementById('strengthMeter');
         const factTextSpan = document.getElementById('factText');
         const entropyDetailsSpan = document.getElementById('entropyDetails');
+        const combinationsNumberSpan = document.getElementById('combinationsNumber');
+        const crackTimeDisplay = document.getElementById('crackTimeDisplay');
+        const speedNote = document.getElementById('speedNote');
+        const speedNormalBtn = document.getElementById('speedNormal');
+        const speedSuperBtn = document.getElementById('speedSuper');
 
-        // ---------- БАЗА ФАКТОВ О ПАРОЛЯХ ----------
+        let currentSpeed = 'normal';
+        let currentPassword = "";
+
         const securityFacts = [
             "🔐 Пароль «123456» взламывается менее чем за секунду. А 12-символьный случайный пароль — миллионы лет.",
             "⚡ Энтропия в 80 бит считается криптостойкой. 12 случайных символов (цифры+буквы+знаки) дают около 70–90 бит.",
@@ -408,7 +602,9 @@
             "🤖 Современные видеокарты могут перебирать миллиарды паролей в секунду. Длина решает всё.",
             "📱 Добавьте двухфакторную аутентификацию даже к идеальному паролю — это удваивает защиту.",
             "🧩 Хранение паролей в браузере — удобно, но рискованно. Лучше выделенный менеджер (Bitwarden, Proton Pass).",
-            "🎲 Криптостойкий генератор использует энтропию из операционной системы (шум мыши, тайминги) — именно такой в этом сайте."
+            "🎲 Криптостойкий генератор использует энтропию из операционной системы (шум мыши, тайминги) — именно такой в этом сайте.",
+            "🏛️ Спецслужбы используют суперкомпьютеры, способные перебирать до 100 миллиардов паролей в секунду.",
+            "🖥️ Обычный мощный компьютер или ферма видеокарт перебирает около 1 миллиарда паролей в секунду."
         ];
 
         let currentFactIndex = 0;
@@ -484,44 +680,120 @@
             return password;
         }
 
-        // Функция вычисления энтропии по формуле E = L * log2(N)
         function calculateEntropy(length, poolSize) {
             if (poolSize <= 0) return 0;
             return length * Math.log2(poolSize);
         }
 
-        // Обновление блока с формулой и деталями
-        function updateEntropyDisplay() {
+        function exactPower(base, exp) {
+            if (base === 0) return "0";
+            if (exp === 0) return "1";
+            let result = 1n;
+            const bigBase = BigInt(base);
+            for (let i = 0; i < exp; i++) {
+                result = result * bigBase;
+                if (result.toString().length > 50) return null;
+            }
+            return result.toString();
+        }
+
+        function formatCombinations(poolSize, length) {
+            const exact = exactPower(poolSize, length);
+            if (exact !== null) {
+                const withSpaces = exact.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+                return `${poolSize}^${length} = ${withSpaces}`;
+            } else {
+                const log10 = length * Math.log10(poolSize);
+                const exponent = Math.floor(log10);
+                const mantissa = Math.pow(10, log10 - exponent);
+                return `${poolSize}^${length} = ${mantissa.toFixed(6)} × 10^${exponent}`;
+            }
+        }
+
+        function formatCrackTime(seconds) {
+            if (seconds < 60) return `${seconds.toFixed(1)} секунд`;
+            if (seconds < 3600) return `${(seconds / 60).toFixed(1)} минут`;
+            if (seconds < 86400) return `${(seconds / 3600).toFixed(1)} часов`;
+            if (seconds < 31536000) return `${(seconds / 86400).toFixed(1)} дней`;
+            if (seconds < 3153600000) return `${(seconds / 31536000).toFixed(1)} лет`;
+            if (seconds < 3.1536e12) return `${(seconds / 3153600000).toFixed(1)} веков`;
+            const millions = seconds / 3.1536e13;
+            if (millions < 1000) return `${millions.toFixed(1)} миллионов лет`;
+            return `${(millions / 1000).toFixed(1)} миллиардов лет`;
+        }
+
+        function calculateCrackTime(poolSize, length, speed) {
+            if (poolSize <= 0) return null;
+            const speedPerSecond = speed === 'normal' ? 1_000_000_000 : 100_000_000_000;
+            const log10Combinations = length * Math.log10(poolSize);
+            const log10Time = log10Combinations - Math.log10(speedPerSecond);
+            if (log10Time > 15) {
+                const seconds = Math.pow(10, log10Time);
+                const years = seconds / 31536000;
+                return { type: 'huge', years: years };
+            }
+            const combinations = Math.pow(poolSize, length);
+            const seconds = combinations / speedPerSecond;
+            return { type: 'normal', seconds: seconds };
+        }
+
+        function updateCrackTimeDisplay() {
+            const length = parseInt(lengthSlider.value, 10);
+            const pool = getCharacterPool();
+            const poolSize = pool.length;
+            if (poolSize === 0) {
+                crackTimeDisplay.innerHTML = "—";
+                return;
+            }
+            const crackInfo = calculateCrackTime(poolSize, length, currentSpeed);
+            if (crackInfo) {
+                if (crackInfo.type === 'normal') {
+                    const timeText = formatCrackTime(crackInfo.seconds);
+                    crackTimeDisplay.innerHTML = `🔓 ${timeText}`;
+                    if (crackInfo.seconds < 86400) crackTimeDisplay.style.color = "#f87171";
+                    else if (crackInfo.seconds < 31536000) crackTimeDisplay.style.color = "#fbbf24";
+                    else crackTimeDisplay.style.color = "#4ade80";
+                } else {
+                    if (crackInfo.years < 1000) crackTimeDisplay.innerHTML = `🔓 ${crackInfo.years.toFixed(0)} лет`;
+                    else if (crackInfo.years < 1_000_000) crackTimeDisplay.innerHTML = `🔓 ${(crackInfo.years / 1000).toFixed(1)} тысяч лет`;
+                    else if (crackInfo.years < 1_000_000_000) crackTimeDisplay.innerHTML = `🔓 ${(crackInfo.years / 1_000_000).toFixed(1)} миллионов лет`;
+                    else crackTimeDisplay.innerHTML = `🔓 ${(crackInfo.years / 1_000_000_000).toFixed(1)} миллиардов лет`;
+                    crackTimeDisplay.style.color = "#4ade80";
+                }
+            } else {
+                crackTimeDisplay.innerHTML = "—";
+            }
+        }
+
+        function updateEntropyAndCombinations() {
             const length = parseInt(lengthSlider.value, 10);
             const pool = getCharacterPool();
             const poolSize = pool.length;
             if (poolSize === 0) {
                 entropyDetailsSpan.innerHTML = "❌ Нет активных символов. Выберите хотя бы один тип.";
+                combinationsNumberSpan.innerHTML = "—";
+                crackTimeDisplay.innerHTML = "—";
                 return;
             }
             const entropy = calculateEntropy(length, poolSize);
-            const roundedEntropy = Math.round(entropy * 10) / 10;
-            entropyDetailsSpan.innerHTML = `🔹 L = ${length} (длина пароля)<br>🔹 N = ${poolSize} (размер алфавита — доступных символов)<br>🔹 log₂(N) = ${Math.log2(poolSize).toFixed(2)}<br>📊 <strong style="color:#facc15">E = ${length} × ${Math.log2(poolSize).toFixed(2)} = ${roundedEntropy} бит</strong>`;
+            const roundedEntropy = Math.round(entropy * 100) / 100;
+            entropyDetailsSpan.innerHTML = `🔹 L = ${length} (длина пароля)<br>🔹 N = ${poolSize} (размер алфавита)<br>🔹 log₂(N) = ${Math.log2(poolSize).toFixed(4)}<br>📊 <strong style="color:#facc15">E = ${length} × ${Math.log2(poolSize).toFixed(4)} = ${roundedEntropy} бит</strong>`;
+            combinationsNumberSpan.innerHTML = formatCombinations(poolSize, length);
+            updateCrackTimeDisplay();
         }
 
         function evaluateStrength(password, poolSize, length) {
             if (!password || password.includes('⚠️')) return { text: '❌ Ошибка параметров', class: 'weak' };
             let entropy = calculateEntropy(length, poolSize);
             entropy = Math.round(entropy * 10) / 10;
-
-            if (length < 8 || entropy < 40) {
-                return { text: `⚠️ Слабый · энтропия ${entropy} бит (рекомендуем длину не менее 12)`, class: 'weak' };
-            } else if (length < 12 || entropy < 60) {
-                return { text: `🟡 Средний · ${entropy} бит · подходит для большинства сервисов`, class: 'medium' };
-            } else {
-                return { text: `✅ Сильный! ${entropy} бит энтропии · перебор невозможен`, class: 'strong' };
-            }
+            if (length < 8 || entropy < 40) return { text: `⚠️ Слабый · энтропия ${entropy} бит (рекомендуем длину не менее 12)`, class: 'weak' };
+            if (length < 12 || entropy < 60) return { text: `🟡 Средний · ${entropy} бит · подходит для большинства сервисов`, class: 'medium' };
+            return { text: `✅ Сильный! ${entropy} бит энтропии · перебор невозможен`, class: 'strong' };
         }
 
         function updateLengthDisplay() {
             lengthSpan.innerText = lengthSlider.value;
-            // Обновляем отображение энтропии при изменении длины (без генерации пароля)
-            updateEntropyDisplay();
+            updateEntropyAndCombinations();
         }
 
         function generateAndDisplay() {
@@ -529,60 +801,66 @@
             if (pool.length === 0) {
                 passwordDiv.innerText = '⚠️ Выберите хотя бы один тип символов';
                 strengthDiv.className = 'strength-meter weak';
-                strengthDiv.innerHTML = '❌ Нет доступных символов для создания пароля';
-                updateEntropyDisplay();
+                strengthDiv.innerHTML = '❌ Нет доступных символов';
+                updateEntropyAndCombinations();
                 return;
             }
-
             const newPwd = generateSecure();
+            currentPassword = newPwd;
             passwordDiv.innerText = newPwd;
             const length = parseInt(lengthSlider.value, 10);
             const poolSize = pool.length;
             const strength = evaluateStrength(newPwd, poolSize, length);
             strengthDiv.innerHTML = strength.text;
             strengthDiv.className = `strength-meter ${strength.class}`;
-            
-            // Обновляем отображение энтропии с формулой
-            updateEntropyDisplay();
-            
+            updateEntropyAndCombinations();
             updateRandomFact();
         }
 
         async function copyPassword() {
             const text = passwordDiv.innerText;
-            if (!text || text.includes('⚠️') || text.includes('Выберите') || text === '··········') {
-                alert('Нечего копировать. Сначала создайте пароль, нажав «Создать пароль».');
+            if (!text || text.includes('⚠️') || text === '··········') {
+                alert('Нечего копировать. Сначала создайте пароль.');
                 return;
             }
             try {
                 await navigator.clipboard.writeText(text);
                 const original = copyBtn.innerText;
                 copyBtn.innerText = '✅ Скопировано!';
-                setTimeout(() => {
-                    copyBtn.innerText = original;
-                }, 1500);
-            } catch {
-                alert('Не удалось скопировать (разрешите доступ к буферу обмена)');
-            }
+                setTimeout(() => { copyBtn.innerText = original; }, 1500);
+            } catch { alert('Не удалось скопировать'); }
         }
 
+        function setSpeed(speed) {
+            currentSpeed = speed;
+            if (speed === 'normal') {
+                speedNormalBtn.classList.add('active');
+                speedSuperBtn.classList.remove('active');
+                speedNote.innerHTML = '⚡ Расчёт для скорости 1 миллиард паролей в секунду (мощный компьютер или ферма видеокарт)';
+            } else {
+                speedSuperBtn.classList.add('active');
+                speedNormalBtn.classList.remove('active');
+                speedNote.innerHTML = '⚡ Расчёт для скорости 100 миллиардов паролей в секунду (спецслужбы, суперкомпьютеры)';
+            }
+            updateCrackTimeDisplay();
+        }
+
+        speedNormalBtn.addEventListener('click', () => setSpeed('normal'));
+        speedSuperBtn.addEventListener('click', () => setSpeed('super'));
         genBtn.addEventListener('click', generateAndDisplay);
         copyBtn.addEventListener('click', copyPassword);
         lengthSlider.addEventListener('input', updateLengthDisplay);
-        
-        // При изменении любого чекбокса обновляем только формулу (пароль не трогаем)
-        upperCheck.addEventListener('change', updateEntropyDisplay);
-        lowerCheck.addEventListener('change', updateEntropyDisplay);
-        digitCheck.addEventListener('change', updateEntropyDisplay);
-        specialCheck.addEventListener('change', updateEntropyDisplay);
-        excludeAmb.addEventListener('change', updateEntropyDisplay);
+        upperCheck.addEventListener('change', updateEntropyAndCombinations);
+        lowerCheck.addEventListener('change', updateEntropyAndCombinations);
+        digitCheck.addEventListener('change', updateEntropyAndCombinations);
+        specialCheck.addEventListener('change', updateEntropyAndCombinations);
+        excludeAmb.addEventListener('change', updateEntropyAndCombinations);
 
-        // Инициализация
         passwordDiv.innerText = '··········';
         strengthDiv.innerHTML = '🔄 Нажмите «Создать пароль»';
         strengthDiv.className = 'strength-meter weak';
         updateRandomFact();
-        updateLengthDisplay();   // покажет начальную энтропию с текущими настройками
+        updateLengthDisplay();
     })();
 </script>
 </body>
