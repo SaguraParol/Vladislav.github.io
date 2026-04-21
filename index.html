@@ -22,7 +22,6 @@
             position: relative;
         }
 
-        /* декоративные элементы */
         body::before {
             content: '';
             position: fixed;
@@ -48,7 +47,7 @@
         }
 
         .glass-card {
-            max-width: 580px;
+            max-width: 620px;
             width: 100%;
             background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(16px);
@@ -92,7 +91,6 @@
             margin-bottom: 28px;
         }
 
-        /* Поле пароля */
         .glass-password {
             background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(8px);
@@ -156,7 +154,6 @@
             transform: translateY(-2px);
         }
 
-        /* Параметры */
         .param-section {
             margin: 24px 0 20px;
         }
@@ -230,7 +227,6 @@
             cursor: pointer;
         }
 
-        /* Индикатор сложности */
         .strength-meter {
             margin-top: 20px;
             padding: 14px;
@@ -260,9 +256,32 @@
             color: #4ade80;
         }
 
-        /* Блок с фактами */
+        /* Новый блок: формула энтропии */
+        .entropy-block {
+            margin-top: 16px;
+            padding: 14px 18px;
+            background: rgba(0, 0, 0, 0.35);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #cbd5e1;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .entropy-formula {
+            font-family: monospace;
+            font-size: 1rem;
+            color: #facc15;
+            margin-bottom: 6px;
+        }
+
+        .entropy-detail {
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
         .fact-block {
-            margin-top: 24px;
+            margin-top: 20px;
             padding: 16px 18px;
             background: rgba(0, 0, 0, 0.3);
             border-radius: 20px;
@@ -320,8 +339,8 @@
         </div>
 
         <div class="check-group">
-            <label><input type="checkbox" id="uppercase" checked> Заглавные A–Z</label>
-            <label><input type="checkbox" id="lowercase" checked> Строчные a–z</label>
+            <label><input type="checkbox" id="uppercase" checked> A-Z</label>
+            <label><input type="checkbox" id="lowercase" checked> a-z</label>
             <label><input type="checkbox" id="digits" checked> Цифры 0–9</label>
             <label><input type="checkbox" id="special" checked> Символы !@#$%^&*</label>
         </div>
@@ -333,6 +352,12 @@
     </div>
 
     <div id="strengthMeter" class="strength-meter weak">🔄 Нажмите «Создать пароль»</div>
+
+    <!-- БЛОК С ФОРМУЛОЙ ЭНТРОПИИ -->
+    <div id="entropyBlock" class="entropy-block">
+        <div class="entropy-formula">📐 E = L × log₂(N)</div>
+        <div id="entropyDetails" class="entropy-detail">—</div>
+    </div>
 
     <div class="fact-block" id="factBox">
         <span class="fact-icon">💡</span>
@@ -368,6 +393,7 @@
         const excludeAmb = document.getElementById('excludeAmbiguous');
         const strengthDiv = document.getElementById('strengthMeter');
         const factTextSpan = document.getElementById('factText');
+        const entropyDetailsSpan = document.getElementById('entropyDetails');
 
         // ---------- БАЗА ФАКТОВ О ПАРОЛЯХ ----------
         const securityFacts = [
@@ -386,7 +412,6 @@
         ];
 
         let currentFactIndex = 0;
-        let currentPassword = ""; // переменная для хранения текущего пароля
 
         function updateRandomFact() {
             let newIndex;
@@ -397,7 +422,6 @@
             factTextSpan.textContent = securityFacts[currentFactIndex];
         }
 
-        // криптостойкий случайный индекс
         function getRandomInt(max) {
             const arr = new Uint32Array(1);
             window.crypto.getRandomValues(arr);
@@ -460,9 +484,29 @@
             return password;
         }
 
+        // Функция вычисления энтропии по формуле E = L * log2(N)
+        function calculateEntropy(length, poolSize) {
+            if (poolSize <= 0) return 0;
+            return length * Math.log2(poolSize);
+        }
+
+        // Обновление блока с формулой и деталями
+        function updateEntropyDisplay() {
+            const length = parseInt(lengthSlider.value, 10);
+            const pool = getCharacterPool();
+            const poolSize = pool.length;
+            if (poolSize === 0) {
+                entropyDetailsSpan.innerHTML = "❌ Нет активных символов. Выберите хотя бы один тип.";
+                return;
+            }
+            const entropy = calculateEntropy(length, poolSize);
+            const roundedEntropy = Math.round(entropy * 10) / 10;
+            entropyDetailsSpan.innerHTML = `🔹 L = ${length} (длина пароля)<br>🔹 N = ${poolSize} (размер алфавита — доступных символов)<br>🔹 log₂(N) = ${Math.log2(poolSize).toFixed(2)}<br>📊 <strong style="color:#facc15">E = ${length} × ${Math.log2(poolSize).toFixed(2)} = ${roundedEntropy} бит</strong>`;
+        }
+
         function evaluateStrength(password, poolSize, length) {
             if (!password || password.includes('⚠️')) return { text: '❌ Ошибка параметров', class: 'weak' };
-            let entropy = Math.log2(Math.pow(poolSize, length));
+            let entropy = calculateEntropy(length, poolSize);
             entropy = Math.round(entropy * 10) / 10;
 
             if (length < 8 || entropy < 40) {
@@ -474,32 +518,33 @@
             }
         }
 
-        // Обновление отображения длины (только цифры, без генерации пароля)
         function updateLengthDisplay() {
             lengthSpan.innerText = lengthSlider.value;
+            // Обновляем отображение энтропии при изменении длины (без генерации пароля)
+            updateEntropyDisplay();
         }
 
-        // Основная функция создания пароля — вызывается ТОЛЬКО по кнопке
         function generateAndDisplay() {
             const pool = getCharacterPool();
             if (pool.length === 0) {
                 passwordDiv.innerText = '⚠️ Выберите хотя бы один тип символов';
                 strengthDiv.className = 'strength-meter weak';
                 strengthDiv.innerHTML = '❌ Нет доступных символов для создания пароля';
-                currentPassword = '';
+                updateEntropyDisplay();
                 return;
             }
 
             const newPwd = generateSecure();
-            currentPassword = newPwd;
             passwordDiv.innerText = newPwd;
             const length = parseInt(lengthSlider.value, 10);
             const poolSize = pool.length;
             const strength = evaluateStrength(newPwd, poolSize, length);
             strengthDiv.innerHTML = strength.text;
             strengthDiv.className = `strength-meter ${strength.class}`;
-
-            // обновляем случайный факт при каждом нажатии
+            
+            // Обновляем отображение энтропии с формулой
+            updateEntropyDisplay();
+            
             updateRandomFact();
         }
 
@@ -521,22 +566,23 @@
             }
         }
 
-        // обработчики событий
         genBtn.addEventListener('click', generateAndDisplay);
         copyBtn.addEventListener('click', copyPassword);
-        
-        // Ползунок длины ТОЛЬКО меняет цифру, НЕ генерирует пароль
         lengthSlider.addEventListener('input', updateLengthDisplay);
         
-        // Чекбоксы НЕ генерируют пароль автоматически — только сохраняют настройки
-        // (никаких обработчиков на change, которые вызывают генерацию)
+        // При изменении любого чекбокса обновляем только формулу (пароль не трогаем)
+        upperCheck.addEventListener('change', updateEntropyDisplay);
+        lowerCheck.addEventListener('change', updateEntropyDisplay);
+        digitCheck.addEventListener('change', updateEntropyDisplay);
+        specialCheck.addEventListener('change', updateEntropyDisplay);
+        excludeAmb.addEventListener('change', updateEntropyDisplay);
 
-        // Инициализация: показываем заглушку и случайный факт
+        // Инициализация
         passwordDiv.innerText = '··········';
         strengthDiv.innerHTML = '🔄 Нажмите «Создать пароль»';
         strengthDiv.className = 'strength-meter weak';
         updateRandomFact();
-        updateLengthDisplay();
+        updateLengthDisplay();   // покажет начальную энтропию с текущими настройками
     })();
 </script>
 </body>
